@@ -16,7 +16,7 @@ const LoginForm = () => {
     );
 
     if (foundUser) {
-      localStorage.setItem('username', foundUser.fullname); // dùng để hiển thị
+      localStorage.setItem('username', foundUser.fullname);
       navigate('/');
     } else {
       alert('Đăng nhập không thành công. Vui lòng kiểm tra lại email và mật khẩu.');

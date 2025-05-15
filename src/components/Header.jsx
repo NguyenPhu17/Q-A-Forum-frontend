@@ -1,14 +1,22 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from 'antd'; // Import Button from Ant Design
+import { Button } from 'antd';
 
 const Header = ({ username, onLogout }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('username');
-    if (onLogout) onLogout(); // Gọi hàm cập nhật state ở App
-    navigate('/'); // Quay về trang chủ
+    if (onLogout) onLogout();
+    navigate('/');
+  };
+
+  const handleMouseEnter = (e, color) => {
+    e.currentTarget.style.backgroundColor = color;
+  };
+
+  const handleMouseLeave = (e, color) => {
+    e.currentTarget.style.backgroundColor = color;
   };
 
   return (
@@ -20,8 +28,12 @@ const Header = ({ username, onLogout }) => {
             <Link to="/login">
               <Button
                 type="primary"
-                className="hover:bg-blue-600"
-                style={{ backgroundColor: '#1e40af', borderColor: '#1e40af' }} // Tailwind + Ant Design button style
+                style={{
+                  backgroundColor: 'royalblue',
+                  borderColor: '#1e40af',
+                }}
+                onMouseEnter={(e) => handleMouseEnter(e, '#1e40af')} 
+                onMouseLeave={(e) => handleMouseLeave(e, 'royalblue')}
               >
                 Đăng nhập
               </Button>
@@ -29,8 +41,13 @@ const Header = ({ username, onLogout }) => {
             <Link to="/register">
               <Button
                 type="default"
-                className="hover:bg-gray-300"
-                style={{ borderColor: '#1e40af' }} // Tailwind + Ant Design button style
+                style={{
+                  borderColor: 'royalblue',
+                  backgroundColor: 'white',
+                  color: 'royalblue',
+                }}
+                onMouseEnter={(e) => handleMouseEnter(e, '#e5e7eb')} 
+                onMouseLeave={(e) => handleMouseLeave(e, 'white')}
               >
                 Đăng ký
               </Button>
@@ -38,7 +55,9 @@ const Header = ({ username, onLogout }) => {
           </div>
         ) : (
           <div className="flex items-center gap-4">
-            <span className="text-gray-700">Xin chào, <strong>{username}</strong></span>
+            <span className="text-gray-700">
+              Xin chào, <strong>{username}</strong>
+            </span>
             <button
               onClick={handleLogout}
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded"

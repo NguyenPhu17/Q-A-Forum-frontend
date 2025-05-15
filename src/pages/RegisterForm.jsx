@@ -25,10 +25,8 @@ const RegisterForm = () => {
       return;
     }
 
-    // Lấy danh sách người dùng từ localStorage
     const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    // Kiểm tra trùng email
     const isExisting = users.find((user) => user.email === form.email);
     if (isExisting) {
       alert('Email này đã được đăng ký.');
@@ -41,7 +39,6 @@ const RegisterForm = () => {
       password: form.password,
     };
 
-    // Thêm vào danh sách và lưu lại
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
 
