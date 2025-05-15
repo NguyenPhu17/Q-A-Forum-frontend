@@ -1,0 +1,107 @@
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+
+const RegisterForm = () => {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    fullname: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (form.password !== form.confirmPassword) {
+      alert('Mật khẩu không khớp!');
+      return;
+    }
+
+    // Lấy danh sách người dùng từ localStorage
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+
+    // Kiểm tra trùng email
+    const isExisting = users.find((user) => user.email === form.email);
+    if (isExisting) {
+      alert('Email này đã được đăng ký.');
+      return;
+    }
+
+    const newUser = {
+      fullname: form.fullname,
+      email: form.email,
+      password: form.password,
+    };
+
+    // Thêm vào danh sách và lưu lại
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+
+    alert('Đăng ký thành công! Bạn có thể đăng nhập.');
+    navigate('/login');
+  };
+
+
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md w-full bg-white p-6 rounded-2xl shadow-md">
+        <div className="relative">
+          <h2 className="text-[28px] text-royalblue font-semibold pl-7 relative">
+            Đăng ký
+            <span className="absolute left-0 top-1.5 w-[18px] h-[18px] bg-royalblue rounded-full" />
+            <span className="absolute left-0 top-1.5 w-[18px] h-[18px] bg-royalblue rounded-full animate-ping" />
+          </h2>
+          <p className="text-sm text-gray-600 mt-1">
+            Đăng ký ngay để sử dụng đầy đủ tính năng của ứng dụng.
+          </p>
+        </div>
+
+        <LabelInputTop label="Họ và tên" type="text" name="fullname" value={form.fullname} onChange={handleChange} />
+        <LabelInputTop label="Email" type="email" name="email" value={form.email} onChange={handleChange} />
+        <LabelInputTop label="Mật khẩu" type="password" name="password" value={form.password} onChange={handleChange} />
+        <LabelInputTop label="Xác nhận mật khẩu" type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} />
+
+        <button type="submit" className="bg-royalblue hover:bg-blue-700 text-white py-2 rounded-lg text-lg">
+          Đăng ký
+        </button>
+
+        <p className="text-sm text-center text-gray-600">
+          Đã có tài khoản?{' '}
+          <Link to="/login" className="text-royalblue hover:underline">
+            Đăng nhập
+          </Link>
+        </p>
+      </form>
+    </div>
+  );
+};
+
+const LabelInputTop = ({ label, type, name, value, onChange }) => {
+  const id = name;
+  return (
+    <div className="flex flex-col gap-1">
+      <label htmlFor={id} className="text-sm text-gray-700 font-medium">
+        {label}
+      </label>
+      <input
+        required
+        type={type}
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none leading-6 focus:border-royalblue focus:ring-1 focus:ring-royalblue"
+      />
+    </div>
+  );
+};
+
+export default RegisterForm;
